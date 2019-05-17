@@ -3,7 +3,7 @@ package com.ytbdmhy.SSO_demo.common.security;
 import com.alibaba.fastjson.JSON;
 import com.ytbdmhy.SSO_demo.common.Enums.ResultEnum;
 import com.ytbdmhy.SSO_demo.common.VO.ResultVO;
-import com.ytbdmhy.SSO_demo.common.utils.DateUtil;
+import com.ytbdmhy.SSO_demo.common.utils.JwtTokenUtil;
 import com.ytbdmhy.SSO_demo.common.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +32,11 @@ public class AjaxLogoutSuccessHandler implements LogoutSuccessHandler {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             final String authToken = authHeader.substring("Bearer ".length());
             // 将token放入黑名单中
-            redisUtil.hset("blacklist", authToken, DateUtil.getTime());
-            log.info("用户登出成功！token：{}已加入redis黑名单", authToken);
+//            redisUtil.hset("blacklist", authToken, DateUtil.getTime());
+            String username = JwtTokenUtil.parseToken(authHeader.substring("Bearer ".length()), "_secret");
+            // 删除token
+            redisUtil.deleteKey(username);
+            log.info("用户登出成功！{}的token已删除", username);
         }
         httpServletResponse.getWriter().write(JSON.toJSONString(ResultVO.result(ResultEnum.USER_LOGOUT_SUCCESS, true)));
     }
