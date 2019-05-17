@@ -3,22 +3,17 @@ package com.ytbdmhy.SSO_demo.common.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Date;
 import java.util.Map;
 
 /**
  * @description: jwt生成token
  */
 public class JwtTokenUtil {
-
-    @Autowired
-    private static RedisUtil redisUtil;
 
     // 寻找证书文件
     private static InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("jwt.jks");
@@ -50,7 +45,7 @@ public class JwtTokenUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000))
+//                .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000)) // 设置token超时时间
 //                .signWith(SignatureAlgorithm.HS512, salt) // 不使用公钥私钥
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
@@ -83,7 +78,11 @@ public class JwtTokenUtil {
      */
     public static Map<String, Object> getClaims(String token) {
         Map<String, Object> claims = null;
-        claims = getTokenBody(token);
+        try {
+            claims = getTokenBody(token);
+        } catch (Exception e) {
+
+        }
         return claims;
     }
 
@@ -91,6 +90,13 @@ public class JwtTokenUtil {
         return Jwts.parser()
                 .setSigningKey(publicKey)
                 .parseClaimsJws(token)
+                .getBody();
+    }
+
+    private static Object getTokenDetail(String token) {
+        return Jwts.parser()
+                .setSigningKey(publicKey)
+                .parse(token)
                 .getBody();
     }
 
@@ -105,5 +111,14 @@ public class JwtTokenUtil {
         // 通过redis中的失效时间进行判断
         String currentTime = DateUtil.getTime();
         return DateUtil.compareDate(currentTime, expirationTime);
+    }
+
+    public static void main(String[] args) {
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ5dGJkbWh5IiwiaXAiOiIwOjA6MDowOjA6MDowOjEifQ.lNN5x1dvVnz62yN6xcUcGHaVdQYjonrsD769fi2izwKjDaYknDFD_1hyzvhFANjmp_qrDE5cEGXT6vXgrvSR9HmDw3TUOT0OgWyofJE_VES7bIMo-0Vr5EnhX6lPCcwTEuIJPAcd0fTxBLyteSJJIa068J9qmS3vybja3GaeXF0";
+
+        String string = parseToken(token, "");
+        System.out.println(string);
+
+        System.out.println(getTokenDetail(token).toString());
     }
 }

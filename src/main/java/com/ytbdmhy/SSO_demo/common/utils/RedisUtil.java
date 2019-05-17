@@ -71,8 +71,8 @@ public class RedisUtil {
     }
 
     /**
-     * 添加单个
-     * 默认过期时间为两小时
+     * Hash中添加单个key-value
+     * 默认没有过期时间
      * @param key
      * @param filed
      * @param domain
@@ -82,7 +82,7 @@ public class RedisUtil {
     }
 
     /**
-     * 添加单个
+     * Hash中添加单个key-value
      * @param key
      * @param filed
      * @param domain
@@ -195,6 +195,15 @@ public class RedisUtil {
 
     /**
      * 查询token下的刷新时间
+     * @param username
+     * @return HV
+     */
+    public Object getTokenByUsername(String username) {
+        return redisTemplate.opsForHash().get(username, "token");
+    }
+
+    /**
+     * 查询token下的刷新时间
      * @param token
      * @return HV
      */
@@ -211,13 +220,13 @@ public class RedisUtil {
         return redisTemplate.opsForHash().get(token, "expirationTime");
     }
 
-    public void setTokenRefresh(String token, String username, String ip) {
+    public void setTokenRefresh(String username, String token, String ip) {
         // 刷新时间
-        Integer expire = validTime * 24 * 60 * 60 * 1000;
+//        Integer expire = validTime * 24 * 60 * 60 * 1000;
 
-        hset(token, "tokenValidTime", DateUtil.getAddDayTime(validTime), expire);
-        hset(token, "expirationTime", DateUtil.getAddDaySecond(expirationSeconds), expire);
-        hset(token, "username", username, expire);
-        hset(token, "ip", ip, expire);
+//        hset(token, "tokenValidTime", DateUtil.getAddDayTime(validTime));
+//        hset(token, "expirationTime", DateUtil.getAddDaySecond(expirationSeconds));
+        hset(username, "token", token);
+        hset(username, "ip", ip);
     }
 }

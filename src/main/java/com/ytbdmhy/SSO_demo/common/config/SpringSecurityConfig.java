@@ -58,6 +58,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
+                // 未登录
                 .and()
                 .httpBasic()
                 .authenticationEntryPoint(authenticationEntryPoint)
