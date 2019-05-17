@@ -19,14 +19,15 @@ public class RbacAuthorityService {
         Object userInfo = authentication.getPrincipal();
         boolean hasPermission = false;
         if (userInfo instanceof UserDetails) {
-            String username = ((UserDetails) userInfo).getUsername();
+//            String username = ((UserDetails) userInfo).getUsername();
 
             // 获取资源
             Set<String> urls = new HashSet<>();
             // 这些url都是要登录后才能访问，且其他的url都不能访问
-            urls.add("/demo/**");
-            Set set2 = new HashSet();
-            Set set3 = new HashSet();
+//            urls.add("/demo/**");
+            urls.add("/test/**");
+//            Set set2 = new HashSet();
+//            Set set3 = new HashSet();
             AntPathMatcher antPathMatcher = new AntPathMatcher();
             for (String url : urls) {
                 if (antPathMatcher.match(url, request.getRequestURI())) {

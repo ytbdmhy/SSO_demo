@@ -54,6 +54,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 去掉CSRF
         http.csrf().disable()
+
                 // 使用JWT，关闭token
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
