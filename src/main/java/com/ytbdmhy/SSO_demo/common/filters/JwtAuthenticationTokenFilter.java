@@ -105,6 +105,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 //                }
 //            }
 
+            /**
+             * token已被登出
+             */
+            if (redisUtil.getTokenByUsername(username) == null) {
+                response.getWriter().write(JSON.toJSONString(ResultVO.result(ResultEnum.LOGIN_IS_OVERDUE, false)));
+                return;
+            }
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 /**
                  * 加入对ip的验证
