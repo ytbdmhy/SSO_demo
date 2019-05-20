@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * Jwt过滤器 继承 一次请求只过滤一次
  * @description: 确保在一次请求只通过一次filter，而不需要重复执行
  */
 @Component

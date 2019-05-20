@@ -56,7 +56,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
 
                 // 使用JWT，关闭token
+
+                // Session管理
                 .sessionManagement()
+                // STATELESS永远不会创建Session，不会使用Session来获取SecurityContext
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 // 未登录
@@ -102,7 +105,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static void main(String[] args) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        encoder.encode("123456");
         System.out.println(encoder.encode("123456"));
     }
 }
