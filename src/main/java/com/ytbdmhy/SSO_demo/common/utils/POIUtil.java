@@ -1,8 +1,5 @@
 package com.ytbdmhy.SSO_demo.common.utils;
 
-import com.alibaba.excel.EasyExcelFactory;
-import com.alibaba.excel.ExcelReader;
-import com.alibaba.excel.support.ExcelTypeEnum;
 import com.monitorjbl.xlsx.StreamingReader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -26,58 +23,67 @@ import java.util.List;
 @Slf4j
 public class POIUtil {
 
-    public static void readExcel2(String filePath) {
-        readExcel2(new File(filePath));
+//    public static void readExcel2(String filePath) {
+//        readExcel2(new File(filePath));
+//    }
+//
+//    public static void readExcel2(File file) {
+//        InputStream inputStream = null;
+//        try {
+//            inputStream = new FileInputStream(file);
+//        } catch (FileNotFoundException e) {
+//            log.error("add message error", e);
+//        }
+//        ExcelListener excelListener = new ExcelListener();
+//        EasyExcelFactory.readBySax(inputStream, new com.alibaba.excel.metadata.Sheet(1,1), excelListener);
+//        List result = excelListener.getDatas();
+//        System.out.println("over");
+//    }
+
+    public static String[] readExcelFirstRow(String filePath) {
+        return readExcelFirstRow(new File(filePath));
     }
 
-    public static void readExcel2(File file) {
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            log.error("add message error", e);
+    public static String[] readExcelFirstRow(File file) {
+        Workbook workbook = getWorkbook(file);
+        if (workbook != null) {
+            String[] firstRow = null;
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+                firstRow = new String[row.getPhysicalNumberOfCells()];
+                int i = 0;
+                for (Cell cell : row) {
+                    firstRow[i] = cell.getStringCellValue();
+                    i++;
+                }
+                break;
+            }
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                log.error("add message error", e);
+            }
+            return firstRow;
+        } else {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                log.error("add message error", e);
+            }
+            return null;
         }
-        ExcelListener excelListener = new ExcelListener();
-        EasyExcelFactory.readBySax(inputStream, new com.alibaba.excel.metadata.Sheet(1,1), excelListener);
-        List result = excelListener.getDatas();
-        System.out.println("over");
     }
 
     public static List readExcel(String filePath) {
-        File file = new File(filePath);
-        return readExcel(file);
+        return readExcel(new File(filePath));
     }
 
     public static List readExcel(File file) {
-        if (file == null)
-            throw new NullPointerException("excel不存在");
-        String fileName = file.getName();
-        if (!fileName.toLowerCase().endsWith(".xls") && !fileName.toLowerCase().endsWith(".xlsx"))
-            throw new NullPointerException("读取的文件不是excel");
         List<String[]> result = new LinkedList<>();
-
-        Workbook workbook = null;
-        try {
-            // 获取文件的IO流
-            InputStream inputStream = new FileInputStream(file);
-            if (fileName.toLowerCase().endsWith(".xls")) {
-                workbook = WorkbookFactory.create(inputStream);
-            } else if (fileName.toLowerCase().endsWith(".xlsx")) {
-                workbook = StreamingReader.builder()
-                        .rowCacheSize(100)
-                        .bufferSize(4096)
-                        .open(inputStream);
-            }
-        } catch (FileNotFoundException e) {
-            log.error("add message error", e);
-        } catch (InvalidFormatException e) {
-            log.error("add message error", e);
-        } catch (IOException e) {
-            log.error("add message error", e);
-        }
+        Workbook workbook = getWorkbook(file);
         if (workbook != null) {
             for (int sheetNum = 0; sheetNum < workbook.getNumberOfSheets(); sheetNum++) {
-                if (fileName.toLowerCase().endsWith(".xls")) {
+                if (file.getName().toLowerCase().endsWith(".xls")) {
                     Sheet sheet = workbook.getSheetAt(sheetNum);
 //                    if (sheet == null)
 //                        continue;
@@ -113,10 +119,6 @@ public class POIUtil {
         } catch (IOException e) {
             log.error("add message error", e);
         }
-
-        System.out.println("------------------------------------");
-        System.out.println(Arrays.toString(result.get(0)));
-        System.out.println(Arrays.toString(result.get(result.size()-1)));
         return result;
     }
 
@@ -190,6 +192,35 @@ public class POIUtil {
         }
     }
 
+    private static Workbook getWorkbook(File file) {
+        if (file == null)
+            throw new NullPointerException("excel不存在");
+        String fileName = file.getName();
+        if (!fileName.toLowerCase().endsWith(".xls") && !fileName.toLowerCase().endsWith(".xlsx"))
+            throw new NullPointerException("读取的文件不是excel");
+
+        Workbook workbook = null;
+        try {
+            // 获取文件的IO流
+            InputStream inputStream = new FileInputStream(file);
+            if (fileName.toLowerCase().endsWith(".xls")) {
+                workbook = WorkbookFactory.create(inputStream);
+            } else if (fileName.toLowerCase().endsWith(".xlsx")) {
+                workbook = StreamingReader.builder()
+                        .rowCacheSize(100)
+                        .bufferSize(4096)
+                        .open(inputStream);
+            }
+        } catch (FileNotFoundException e) {
+            log.error("add message error", e);
+        } catch (InvalidFormatException e) {
+            log.error("add message error", e);
+        } catch (IOException e) {
+            log.error("add message error", e);
+        }
+        return workbook;
+    }
+
     public static void main(String[] args) throws FileNotFoundException {
         System.out.println("start");
         long startTime = System.currentTimeMillis();
@@ -197,8 +228,15 @@ public class POIUtil {
         // readExcel2
 //        readExcel2("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
 
+        // readExcelFirstRow
+        String[] result = readExcelFirstRow("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
+        System.out.println(Arrays.toString(result));
+
         // readExcel
-        List excelData = readExcel("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcellogDate.xlsx");
+//        List<String[]> excelData = readExcel("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
+//        System.out.println("------------------------------------");
+//        System.out.println(Arrays.toString(excelData.get(0)));
+//        System.out.println(Arrays.toString(excelData.get(excelData.size()-1)));
 
         // exportExcel
 //        String exportPath = "D:/WorkFile/test.xlsx";
