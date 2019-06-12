@@ -47,8 +47,8 @@ public class POIUtilMhy {
 
     public static String[] readExcelFirstRow(File file) {
         Workbook workbook = getWorkbook(file);
+        String[] firstRow = null;
         if (workbook != null) {
-            String[] firstRow = null;
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
                 firstRow = new String[row.getPhysicalNumberOfCells()];
@@ -59,20 +59,13 @@ public class POIUtilMhy {
                 }
                 break;
             }
-            try {
-                workbook.close();
-            } catch (IOException e) {
-                log.error("add message error", e);
-            }
-            return firstRow;
-        } else {
-            try {
-                workbook.close();
-            } catch (IOException e) {
-                log.error("add message error", e);
-            }
-            return null;
         }
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            log.error("add message error", e);
+        }
+        return firstRow;
     }
 
     public static List readExcel(String filePath) {
@@ -196,10 +189,12 @@ public class POIUtilMhy {
 
     private static Workbook getWorkbook(File file) {
         if (file == null)
-            throw new NullPointerException("excel不存在");
+//            throw new NullPointerException("excel不存在");
+            return null;
         String fileName = file.getName();
         if (!fileName.toLowerCase().endsWith(".xls") && !fileName.toLowerCase().endsWith(".xlsx"))
-            throw new NullPointerException("读取的文件不是excel");
+//            throw new NullPointerException("读取的文件不是excel");
+            return null;
 
         Workbook workbook = null;
         try {
