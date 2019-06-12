@@ -6,6 +6,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ import java.util.List;
  * @Remarks: poi 3.17; poi-ooxml 3.17; poi-scratchpad 3.17
  */
 @Slf4j
-public class POIUtil {
+public class POIUtilMhy {
 
 //    public static void readExcel2(String filePath) {
 //        readExcel2(new File(filePath));
@@ -128,7 +129,8 @@ public class POIUtil {
 
     public static void exportExcel(String exportPath, String[] firstRow, List<Object[]> dataList) {
         if (dataList == null || dataList.size() == 0)
-            throw new NullPointerException("将要导出excel的数据为空");
+//            throw new NullPointerException("将要导出excel的数据为空");
+            return;
         if (!exportPath.toLowerCase().endsWith(".xls") && !exportPath.toLowerCase().endsWith(".xlsx"))
             exportPath += ".xlsx";
         // 创建工作簿
@@ -165,7 +167,7 @@ public class POIUtil {
                 // 设置单元格的数据类型为文本
                 cell.setCellType(CellType.STRING);
                 // 设置单元格的数值
-                cell.setCellValue(colData);
+                cell.setCellValue(StringUtils.isEmpty(colData) ? null : colData);
                 i++;
             }
             i = 1;
@@ -175,7 +177,7 @@ public class POIUtil {
             int j = 0;
             for (Object colData : rowData) {
                 Cell cell = row.createCell(j, CellType.STRING);
-                cell.setCellValue(String.valueOf(colData));
+                cell.setCellValue(StringUtils.isEmpty(colData) ? null : String.valueOf(colData));
                 j++;
             }
             i++;
@@ -229,14 +231,14 @@ public class POIUtil {
 //        readExcel2("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
 
         // readExcelFirstRow
-        String[] result = readExcelFirstRow("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
-        System.out.println(Arrays.toString(result));
+//        String[] result = readExcelFirstRow("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
+//        System.out.println(Arrays.toString(result));
 
         // readExcel
-//        List<String[]> excelData = readExcel("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
-//        System.out.println("------------------------------------");
-//        System.out.println(Arrays.toString(excelData.get(0)));
-//        System.out.println(Arrays.toString(excelData.get(excelData.size()-1)));
+        List<String[]> excelData = readExcel("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcellogDate.xlsx");
+        System.out.println("------------------------------------");
+        System.out.println(Arrays.toString(excelData.get(0)));
+        System.out.println(Arrays.toString(excelData.get(excelData.size()-1)));
 
         // exportExcel
 //        String exportPath = "D:/WorkFile/test.xlsx";
