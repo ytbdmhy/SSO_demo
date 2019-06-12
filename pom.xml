@@ -112,6 +112,18 @@
 			<version>1.7.25</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.monitorjbl</groupId>
+			<artifactId>xlsx-streamer</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>easyexcel</artifactId>
+			<version>1.1.2-beta4</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
