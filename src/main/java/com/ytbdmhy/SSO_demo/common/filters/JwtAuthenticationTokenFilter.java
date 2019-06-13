@@ -120,7 +120,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                  * 如果ip不正确，进入黑名单验证
                  */
                 // 地址不正确
-//                if (!StringUtil.equals(ip, currentIp)) {
+//                if (!ip.equals(currentIp)) {
 //                    log.info("用户：{}的ip地址变动，进入黑名单校验", username);
 //                    // 进入黑名单验证
 //                    if (redisUtil.isBlackList(authToken)) {
