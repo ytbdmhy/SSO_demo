@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @Copyright: weface
+ * @Copyright:
  * @Description:
  * @author: miaohaoyun
  * @since:
@@ -23,23 +23,6 @@ import java.util.List;
  */
 @Slf4j
 public class POIUtilMhy {
-
-//    public static void readExcel2(String filePath) {
-//        readExcel2(new File(filePath));
-//    }
-//
-//    public static void readExcel2(File file) {
-//        InputStream inputStream = null;
-//        try {
-//            inputStream = new FileInputStream(file);
-//        } catch (FileNotFoundException e) {
-//            log.error("add message error", e);
-//        }
-//        ExcelListener excelListener = new ExcelListener();
-//        EasyExcelFactory.readBySax(inputStream, new com.alibaba.excel.metadata.Sheet(1,1), excelListener);
-//        List result = excelListener.getDatas();
-//        System.out.println("over");
-//    }
 
     public static String[] readExcelFirstRow(String filePath) {
         return readExcelFirstRow(new File(filePath));
