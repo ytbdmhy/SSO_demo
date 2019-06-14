@@ -162,7 +162,9 @@ public class POIUtilMhy {
                 workbook.write(fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -202,9 +204,6 @@ public class POIUtilMhy {
     public static void main(String[] args) throws FileNotFoundException {
         System.out.println("start");
         long startTime = System.currentTimeMillis();
-
-        // readExcel2
-//        readExcel2("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
 
         // readExcelFirstRow
 //        String[] result = readExcelFirstRow("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
