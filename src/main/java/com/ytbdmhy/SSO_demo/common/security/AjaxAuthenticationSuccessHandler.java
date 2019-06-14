@@ -42,8 +42,8 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         SelfUserDetails userDetails = (SelfUserDetails) authentication.getPrincipal();
         Map<String, Object> map = new HashMap<>();
 //        map.put("ip", currentIp);
-        Object token = redisUtil.getTokenByUsername(userDetails.getUsername());
-        String jwtToken = token == null ? JwtTokenUtil.generateToken(userDetails.getUsername(), expirationSeconds, map) : (String) token;
+        String token = String.valueOf(redisUtil.getTokenByUsername(userDetails.getUsername()));
+        String jwtToken = token == null ? JwtTokenUtil.generateToken(userDetails.getUsername(), expirationSeconds, map) : token;
 
         if (token == null) {
             redisUtil.setTokenRefresh(userDetails.getUsername(), jwtToken);
