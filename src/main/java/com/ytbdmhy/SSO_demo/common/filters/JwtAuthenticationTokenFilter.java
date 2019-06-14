@@ -48,11 +48,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 //        String currentIp = AccessAddressUtil.getIpAddress(request);
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String authToken = authHeader.substring(7); // 7 = "Bearer ".length
-            String username = null;
+            String username;
             try {
                 username = JwtTokenUtil.parseToken(authToken, "_secret");
             } catch (SignatureException e) {
-                // TODO token无效 返回错误码给前端让前端跳转到登录页面
+                // token无效 返回错误码给前端让前端跳转到登录页面
+                log.info("token：{}无效，拒绝访问", authToken);
+                response.getWriter().write(JSON.toJSONString(ResultVO.result(ResultEnum.TOKEN_NO_AVAIL, false)));
+                return;
             }
 
             /**
