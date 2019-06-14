@@ -59,7 +59,7 @@ public class JwtTokenUtil {
      * @return
      */
     public static String parseToken(String token, String salt) throws SignatureException {
-        String subject = null;
+        String subject;
 
 //            Claims claims = Jwts.parser() // 不使用公钥私钥
 //                    .setSigningKey(salt)
