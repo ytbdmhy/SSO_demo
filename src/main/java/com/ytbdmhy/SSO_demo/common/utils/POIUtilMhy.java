@@ -1,7 +1,6 @@
 package com.ytbdmhy.SSO_demo.common.utils;
 
 import com.monitorjbl.xlsx.StreamingReader;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -21,7 +20,6 @@ import java.util.List;
  * @history: created in 10:02 2019-06-11 created by miaohaoyun
  * @Remarks: poi 3.17; poi-ooxml 3.17; poi-scratchpad 3.17
  */
-@Slf4j
 public class POIUtilMhy {
 
     public static String[] readExcelFirstRow(String filePath) {
@@ -46,7 +44,7 @@ public class POIUtilMhy {
         try {
             workbook.close();
         } catch (IOException e) {
-            log.error("add message error", e);
+            e.printStackTrace();
         }
         return firstRow;
     }
@@ -94,7 +92,7 @@ public class POIUtilMhy {
         try {
             workbook.close();
         } catch (IOException e) {
-            log.error("add message error", e);
+            e.printStackTrace();
         }
         return result;
     }
@@ -165,7 +163,7 @@ public class POIUtilMhy {
                 fileOutputStream.flush();
                 fileOutputStream.close();
             } catch (Exception e) {
-                log.error("add message error", e);
+                e.printStackTrace();
             }
         }
     }
@@ -192,11 +190,11 @@ public class POIUtilMhy {
                         .open(inputStream);
             }
         } catch (FileNotFoundException e) {
-            log.error("add message error", e);
+            e.printStackTrace();
         } catch (InvalidFormatException e) {
-            log.error("add message error", e);
+            e.printStackTrace();
         } catch (IOException e) {
-            log.error("add message error", e);
+            e.printStackTrace();
         }
         return workbook;
     }
