@@ -3,11 +3,14 @@ package com.ytbdmhy.SSO_demo.common.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -45,7 +48,7 @@ public class JwtTokenUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-//                .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000)) // 设置token超时时间
+//                .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 2592000)) // 设置token超时时间
 //                .signWith(SignatureAlgorithm.HS512, salt) // 不使用公钥私钥
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
@@ -57,17 +60,16 @@ public class JwtTokenUtil {
      * @param salt
      * @return
      */
-    public static String parseToken(String token, String salt) {
+    public static String parseToken(String token, String salt) throws SignatureException {
         String subject = null;
-        try {
+
 //            Claims claims = Jwts.parser() // 不使用公钥私钥
 //                    .setSigningKey(salt)
 //                    .setSigningKey(publicKey)
 //                    .parseClaimsJws(token)
 //                    .getBody();
-            subject = getTokenBody(token).getSubject();
-        } catch (Exception e) {
-        }
+        subject = getTokenBody(token).getSubject();
+
         return subject;
     }
 
@@ -86,14 +88,14 @@ public class JwtTokenUtil {
         return claims;
     }
 
-    private static Claims getTokenBody(String token) {
+    private static Claims getTokenBody(String token) throws SignatureException {
         return Jwts.parser()
                 .setSigningKey(publicKey)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    private static Object getTokenDetail(String token) {
+    private static Object getTokenDetail(String token) throws SignatureException {
         return Jwts.parser()
                 .setSigningKey(publicKey)
                 .parse(token)
@@ -114,11 +116,20 @@ public class JwtTokenUtil {
     }
 
     public static void main(String[] args) {
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ5dGJkbWh5IiwiaXAiOiIwOjA6MDowOjA6MDowOjEifQ.lNN5x1dvVnz62yN6xcUcGHaVdQYjonrsD769fi2izwKjDaYknDFD_1hyzvhFANjmp_qrDE5cEGXT6vXgrvSR9HmDw3TUOT0OgWyofJE_VES7bIMo-0Vr5EnhX6lPCcwTEuIJPAcd0fTxBLyteSJJIa068J9qmS3vybja3GaeXF0";
 
-        String string = parseToken(token, "");
-        System.out.println(string);
+//        System.out.println(generateToken("ytbdmhy", 2592000, new HashMap<>()));
 
-        System.out.println(getTokenDetail(token).toString());
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ5dGJkbWh5In0.jfTmw0PI8hTOcws9QHv9yBG2RCsQejztVp4e1EKBRNQvIam9E6l-lpUEMKIjJu4iZ12bnFB0eCh7ZXtMs0Ib9Sy-RlF24OSAytIR6961cVqQDRqjWjPl7sK7aFNWu5fyY_WhHVYqh4QjKo8Ftsj8Wbv13XEyz0-NsOxwmA3gD0gg";
+//        try {
+//            System.out.println(parseToken(token, ""));
+//        } catch (SignatureException e) {
+//            System.out.println("token无效");
+//        }
+//        System.out.println(getTokenBody(token));
+        try {
+            System.out.println(getTokenDetail(token).toString());
+        } catch (SignatureException e) {
+            System.out.println("token无效");
+        }
     }
 }

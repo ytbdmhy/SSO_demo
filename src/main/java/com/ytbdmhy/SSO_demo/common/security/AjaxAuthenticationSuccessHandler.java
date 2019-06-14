@@ -38,15 +38,17 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
 //        String authHeader = httpServletRequest.getHeader("Authorization");
-        String currentIp = AccessAddressUtil.getIpAddress(httpServletRequest);
+//        String currentIp = AccessAddressUtil.getIpAddress(httpServletRequest);
         SelfUserDetails userDetails = (SelfUserDetails) authentication.getPrincipal();
         Map<String, Object> map = new HashMap<>();
-        map.put("ip", currentIp);
+//        map.put("ip", currentIp);
         Object token = redisUtil.getTokenByUsername(userDetails.getUsername());
         String jwtToken = token == null ? JwtTokenUtil.generateToken(userDetails.getUsername(), expirationSeconds, map) : (String) token;
 
         if (token == null) {
-            redisUtil.setTokenRefresh(userDetails.getUsername(), jwtToken, currentIp);
+            redisUtil.setTokenRefresh(userDetails.getUsername(), jwtToken);
+        } else {
+            redisUtil.expire(userDetails.getUsername(), expirationSeconds);
         }
 
         log.info("用户：{}登录成功,信息已保存至redis", userDetails.getUsername());

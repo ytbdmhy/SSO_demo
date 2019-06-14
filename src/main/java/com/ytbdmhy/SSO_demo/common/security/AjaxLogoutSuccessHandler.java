@@ -5,6 +5,7 @@ import com.ytbdmhy.SSO_demo.common.Enums.ResultEnum;
 import com.ytbdmhy.SSO_demo.common.VO.ResultVO;
 import com.ytbdmhy.SSO_demo.common.utils.JwtTokenUtil;
 import com.ytbdmhy.SSO_demo.common.utils.RedisUtil;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -33,7 +34,12 @@ public class AjaxLogoutSuccessHandler implements LogoutSuccessHandler {
             final String authToken = authHeader.substring("Bearer ".length());
             // 将token放入黑名单中
 //            redisUtil.hset("blacklist", authToken, DateUtil.getTime());
-            String username = JwtTokenUtil.parseToken(authHeader.substring("Bearer ".length()), "_secret");
+            String username = null;
+            try {
+                username = JwtTokenUtil.parseToken(authHeader.substring("Bearer ".length()), "_secret");
+            } catch (SignatureException e) {
+
+            }
             // 删除token
             redisUtil.deleteKey(username);
             log.info("用户登出成功！{}的token已删除", username);

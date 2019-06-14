@@ -71,6 +71,15 @@ public class RedisUtil {
     }
 
     /**
+     * 刷新key的剩余时间
+     * @param key
+     * @param expire 过期时间
+     */
+    public void expire(String key, Integer expire) {
+        redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+    }
+
+    /**
      * Hash中添加单个key-value
      * 默认没有过期时间
      * @param key
@@ -220,13 +229,14 @@ public class RedisUtil {
         return redisTemplate.opsForHash().get(token, "expirationTime");
     }
 
-    public void setTokenRefresh(String username, String token, String ip) {
+    public void setTokenRefresh(String username, String token) {
         // 刷新时间
 //        Integer expire = validTime * 24 * 60 * 60 * 1000;
 
 //        hset(token, "tokenValidTime", DateUtil.getAddDayTime(validTime));
 //        hset(token, "expirationTime", DateUtil.getAddDaySecond(expirationSeconds));
-        hset(username, "token", token);
-        hset(username, "ip", ip);
+        hset(username, "token", token, expirationSeconds);
+//        hset(username, "ip", ip);
     }
+
 }
