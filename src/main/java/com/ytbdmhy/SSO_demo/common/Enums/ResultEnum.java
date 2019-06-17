@@ -18,7 +18,7 @@ public enum ResultEnum {
     TOKEN_IS_BLACKLIST(306, "此token为黑名单"),
     LOGIN_IS_OVERDUE(307, "登录已失效"),
     USER_HAS_CANCELLED(308, "用户账号已被注销"),
-    TOKEN_NO_AVAIL(309, "token无效"),
+    TOKEN_NO_AVAIL(309, "token已失效"),
     ;
 
     private Integer code;

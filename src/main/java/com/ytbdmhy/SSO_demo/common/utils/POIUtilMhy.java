@@ -1,7 +1,6 @@
 package com.ytbdmhy.SSO_demo.common.utils;
 
 import com.monitorjbl.xlsx.StreamingReader;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -14,7 +13,7 @@ import java.util.List;
 
 /**
  * @Copyright:
- * @Description:
+ * @Description: POI工具类
  * @author: miaohaoyun
  * @since:
  * @history: created in 10:02 2019-06-11 created by miaohaoyun
@@ -162,9 +161,7 @@ public class POIUtilMhy {
                 workbook.write(fileOutputStream);
                 fileOutputStream.flush();
                 fileOutputStream.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -191,11 +188,7 @@ public class POIUtilMhy {
                         .bufferSize(4096)
                         .open(inputStream);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvalidFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return workbook;
