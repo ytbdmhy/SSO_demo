@@ -1,11 +1,7 @@
 package com.ytbdmhy.SSO_demo.common.utils;
 
 import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Position;
-import net.coobird.thumbnailator.geometry.Positions;
 
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 
 /**
