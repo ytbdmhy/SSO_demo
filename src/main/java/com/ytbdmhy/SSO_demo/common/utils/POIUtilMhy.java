@@ -7,7 +7,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -197,24 +196,6 @@ public class POIUtilMhy {
     public static void main(String[] args) throws FileNotFoundException {
         System.out.println("start");
         long startTime = System.currentTimeMillis();
-
-        // readExcelFirstRow
-//        String[] result = readExcelFirstRow("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcel.xlsx");
-//        System.out.println(Arrays.toString(result));
-
-        // readExcel
-        List<String[]> excelData = readExcel("D:\\WorkFile\\0606-副本\\大名已制卡名单\\合并excel\\allExcellogDate.xlsx");
-        System.out.println("------------------------------------");
-        System.out.println(Arrays.toString(excelData.get(0)));
-        System.out.println(Arrays.toString(excelData.get(excelData.size()-1)));
-
-        // exportExcel
-//        String exportPath = "D:/WorkFile/test.xlsx";
-//        List<Object[]> dataList = new LinkedList<>();
-//        for (int i = 0;i < 1000000;i++) {
-//            dataList.add(new String[]{"data-"+i+"-1", "data-"+i+"-2", "data-"+i+"-3"});
-//        }
-//        exportExcel(exportPath, new String[]{"id","name","age"}, dataList);
 
         System.out.println("over,用时:" + (System.currentTimeMillis() - startTime) + "毫秒");
     }
