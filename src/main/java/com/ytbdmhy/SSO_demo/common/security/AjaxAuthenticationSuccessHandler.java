@@ -43,9 +43,9 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         Map<String, Object> map = new HashMap<>();
 //        map.put("ip", currentIp);
         String token = String.valueOf(redisUtil.getTokenByUsername(userDetails.getUsername()));
-        String jwtToken = token == null ? JwtTokenUtil.generateToken(userDetails.getUsername(), expirationSeconds, map) : token;
+        String jwtToken = (token == null || "".equals(token) || "null".equals(token)) ? JwtTokenUtil.generateToken(userDetails.getUsername(), expirationSeconds, map) : token;
 
-        if (token == null) {
+        if (token == null || "".equals(token) || "null".equals(token)) {
             redisUtil.setTokenRefresh(userDetails.getUsername(), jwtToken);
         } else {
             redisUtil.expire(userDetails.getUsername(), expirationSeconds);
@@ -53,6 +53,7 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
         log.info("用户：{}登录成功,信息已保存至redis", userDetails.getUsername());
         httpServletResponse.setHeader("Authorization", "Bearer " + jwtToken);
+        httpServletResponse.setHeader("Content-Type", "application/json");
         httpServletResponse.getWriter().write(JSON.toJSONString(ResultVO.result(ResultEnum.USER_LOGIN_SUCCESS, jwtToken, true)));
     }
 }
