@@ -58,17 +58,17 @@ public class POIUtilMhy {
             for (int sheetNum = 0; sheetNum < workbook.getNumberOfSheets(); sheetNum++) {
                 if (file.getName().toLowerCase().endsWith(".xls")) {
                     Sheet sheet = workbook.getSheetAt(sheetNum);
-                    if (sheet == null)
-                        continue;
+//                    if (sheet == null)
+//                        continue;
                     for (int rowNum = sheet.getFirstRowNum(); rowNum < sheet.getLastRowNum(); rowNum++) {
                         Row row = sheet.getRow(rowNum);
                         String[] rowValue = new String[row.getLastCellNum() - row.getFirstCellNum()];
-                        if (row == null)
-                            continue;
+//                        if (row == null)
+//                            continue;
                         for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
                             Cell cell = row.getCell(cellNum);
-                            if (cell == null)
-                                continue;
+//                            if (cell == null)
+//                                continue;
                             rowValue[cellNum] = cell.getStringCellValue();
                         }
                         result.add(rowValue);
